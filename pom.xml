@@ -135,6 +135,38 @@
                     <apiDocsUrl>http://localhost:8080/v3/api-docs.yaml</apiDocsUrl>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
+                <version>7.16.0</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>src/main/resources/customer-service-openapi.yaml</inputSpec>
+                            <generatorName>asciidoc</generatorName>
+                            <output>${project.build.directory}/generated-docs</output>
+                            <validateSpec>false</validateSpec>
+                            <configOptions>
+                                <specDir>${project.build.directory}/generated-docs</specDir>
+                                <snippetDir>${project.build.directory}/generated-snippets</snippetDir>
+                                <headerAttributes>true</headerAttributes>
+                                <useIntroduction>true</useIntroduction>
+                            </configOptions>
+                            <additionalProperties>
+                                <additionalProperty>appName=Customer Service API</additionalProperty>
+                                <additionalProperty>appDescription=Customer Service API Documentation</additionalProperty>
+                            </additionalProperties>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+
+
         </plugins>
     </build>
 

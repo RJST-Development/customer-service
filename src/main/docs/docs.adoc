@@ -1,0 +1,19 @@
+= Customer Service API Documentation
+:toc: left
+:toclevels: 3
+:sectanchors:
+:sectlinks:
+:source-highlighter: highlight.js
+
+== Einleitung
+
+Willkommen zur Dokumentation der Customer Service API.
+
+
+== API Spezifikation
+
+include::../../../target/generated-docs/index.adoc[]
+
+== Zusätzliche Informationen
+
+Hier können Sie weitere Informationen hinzufügen.
