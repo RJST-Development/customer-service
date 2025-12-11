@@ -1,12 +1,8 @@
 package de.rjst.cs.api;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-
 import de.rjst.cs.TestcontainersConfiguration;
 import de.rjst.cs.api.model.CreateCustomerDto;
-import de.rjst.cs.datasource.CustomerControllerRestAssured;
-import io.restassured.response.ExtractableResponse;
-import io.restassured.response.Response;
+import de.rjst.cs.datasource.CustomerAdapter;
 import java.time.LocalDate;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,24 +14,27 @@ import org.springframework.context.annotation.Import;
 class CustomerControllerIT {
 
     @Autowired
-    private CustomerControllerRestAssured customerController;
+    private CustomerAdapter customerAdapter;
 
     @Test
     void getCustomers() {
-        final var response = customerController.getCustomers();
-        assertThat(response.statusCode()).isEqualTo(200);
+        final var response = customerAdapter.getCustomers();
+        response.expectStatus()
+                .isOk();
     }
 
     @Test
     void getCustomerById() {
-        final ExtractableResponse<Response> response = customerController.getCustomerById(1L);
-        assertThat(response.statusCode()).isEqualTo(200);
+        final var response = customerAdapter.getCustomerById(1L);
+        response.expectStatus()
+                .isOk();
     }
 
     @Test
     void getCustomerById_notFound() {
-        final ExtractableResponse<Response> response = customerController.getCustomerById(Long.MAX_VALUE);
-        assertThat(response.statusCode()).isEqualTo(404);
+        final var response = customerAdapter.getCustomerById(Long.MAX_VALUE);
+        response.expectStatus()
+                .isOk();
     }
 
     @Test
@@ -46,8 +45,9 @@ class CustomerControllerIT {
         createCustomerDto.setBirthDate(LocalDate.of(1990, 1, 1));
         createCustomerDto.setEmail("<EMAIL>");
 
-        final var response = customerController.postCustomers(createCustomerDto);
-        assertThat(response.statusCode()).isEqualTo(201);
+        final var response = customerAdapter.postCustomers(createCustomerDto);
+        response.expectStatus()
+                .isCreated();
     }
 
     @Test
@@ -58,15 +58,10 @@ class CustomerControllerIT {
         createCustomerDto.setBirthDate(LocalDate.of(1990, 1, 1));
         createCustomerDto.setEmail("<EMAIL>");
 
-        final var response = customerController.postCustomers(createCustomerDto);
-        assertThat(response.statusCode()).isEqualTo(400);
+        final var response = customerAdapter.postCustomers(createCustomerDto);
+        response.expectStatus()
+                .isBadRequest();
     }
 
-    @Test
-    void updateCustomer() {
-    }
 
-    @Test
-    void deleteCustomer() {
-    }
 }

@@ -12,18 +12,18 @@ import io.github.microcks.testcontainers.model.TestRunnerType;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.web.context.ConfigurableWebServerApplicationContext;
+import org.springframework.boot.web.server.servlet.context.ServletWebServerApplicationContext;
 import org.springframework.context.annotation.Import;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Import(TestcontainersConfiguration.class)
-public class CustomerServiceContractIT {
+class CustomerServiceContractIT {
 
     @Autowired
     private MicrocksContainersEnsemble microcksEnsemble;
 
     @Autowired
-    private ConfigurableWebServerApplicationContext context;
+    private ServletWebServerApplicationContext context;
 
 
     @Test
@@ -31,19 +31,21 @@ public class CustomerServiceContractIT {
         final var webServer = context.getWebServer();
         final var port = webServer.getPort();
         final var testRequest = new TestRequest.Builder()
-                .serviceId("Customer Service API:v1")
-                .runnerType(TestRunnerType.OPEN_API_SCHEMA.name())
-                .testEndpoint("http://host.docker.internal:" + port)
-                .build();
+            .serviceId("Customer Service API:v1")
+            .runnerType(TestRunnerType.OPEN_API_SCHEMA.name())
+            .testEndpoint("http://host.docker.internal:" + port)
+            .build();
 
         final var microcksContainer = microcksEnsemble.getMicrocksContainer();
         final var testResult = microcksContainer.testEndpoint(testRequest);
 
-        final var mapper = new ObjectMapper().setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(testResult));
+        final var mapper = new ObjectMapper().setDefaultPropertyInclusion(JsonInclude.Include.NON_NULL);
+        System.out.println(mapper.writerWithDefaultPrettyPrinter()
+                                 .writeValueAsString(testResult));
 
         assertTrue(testResult.isSuccess());
-        assertEquals(5, testResult.getTestCaseResults().size());
+        assertEquals(5, testResult.getTestCaseResults()
+                                  .size());
     }
 
     @Test
@@ -58,12 +60,14 @@ public class CustomerServiceContractIT {
 
         final var testResult = microcksContainer.testEndpoint(testRequest);
 
-        final var mapper = new ObjectMapper().setSerializationInclusion(
+        final var mapper = new ObjectMapper().setDefaultPropertyInclusion(
             JsonInclude.Include.NON_NULL);
-        System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(testResult));
+        System.out.println(mapper.writerWithDefaultPrettyPrinter()
+                                 .writeValueAsString(testResult));
 
         assertTrue(testResult.isSuccess());
-        assertEquals(5, testResult.getTestCaseResults().size());
+        assertEquals(5, testResult.getTestCaseResults()
+                                  .size());
     }
 }
 
