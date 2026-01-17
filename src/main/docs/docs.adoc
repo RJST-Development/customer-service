@@ -3,16 +3,13 @@
 :toclevels: 3
 :sectanchors:
 :sectlinks:
-:source-highlighter: highlight.js
 
 == Einleitung
 
 Willkommen zur Dokumentation der Customer Service API.
 
 
-== API Spezifikation
-
-include::../../../target/generated-docs/index.adoc[]
+include::../../../target/generated-docs/index.adoc[leveloffset=+1]
 
 == Zusätzliche Informationen
 
